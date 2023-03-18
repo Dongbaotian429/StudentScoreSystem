@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dbt.mapper.StudentMapper">
+
+     <resultMap id="studentAndScore" type="com.dbt.entity.Student">
+         <id property="studentId" column="student_id"></id>
+         <result property="password" column="password"></result>
+         <result property="name" column="name"></result>
+         <result property="studentClazz" column="student_class"></result>
+         <collection property="listScore" ofType="com.dbt.entity.Score">
+            <id property="studentId" column="student_id"></id>
+            <result property="classPerformance" column="class_performance"></result>
+            <result property="finalExam" column="final_exam"></result>
+            <result property="sumScore" column="sum_score"></result>
+         </collection>
+     </resultMap>
+    <insert id="addStudent">
+        insert into t_student values (#{studentId},#{name},#{studentClazz},#{password})
+    </insert>
+    <update id="updateStudent">
+        update t_student set name=#{name},student_class =#{studentClazz},password=#{password} where student_id=#{studentId}
+    </update>
+    <update id="StudentUpdateOfStudent">
+        update t_student set name=#{name},student_class=#{studentClazz} where student_id=#{studentId}
+    </update>
+    <update id="StudentUpdatePassword">
+        update t_student set password=#{newPassword} where student_id =#{studentId}
+    </update>
+    <select id="getAllStudent" resultMap="studentAndScore">
+        select * from t_student left join t_score on t_student.student_id = t_score.student_id
+    </select>
+
+
+    <resultMap id="getStudentById" type="com.dbt.entity.Student">
+        <id property="studentId" column="student_id"></id>
+        <result property="password" column="password"></result>
+        <result property="name" column="name"></result>
+        <result property="studentClazz" column="student_class"></result>
+        <collection property="listScore" ofType="com.dbt.entity.Score">
+            <id property="studentId" column="student_id"></id>
+            <result property="classPerformance" column="class_performance"></result>
+            <result property="finalExam" column="final_exam"></result>
+            <result property="sumScore" column="sum_score"></result>
+        </collection>
+    </resultMap>
+
+    <select id="getStudentById" resultMap="getStudentById">
+        select * from t_student left join t_score on t_student.student_id = t_score.student_id
+        where t_student.student_id =#{studentId} and t_student.password =#{password}
+    </select>
+</mapper>

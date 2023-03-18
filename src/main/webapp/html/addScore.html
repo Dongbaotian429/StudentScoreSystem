@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评分</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            height: 100%;
+        }
+        body {
+            height: 100%;
+        }
+        .container {
+            height: 100%;
+            background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
+        }
+        .login-wrapper {
+            background-color: #fff;
+            width: 358px;
+            height: 588px;
+            border-radius: 15px;
+            padding: 0 50px;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .header {
+            font-size: 38px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 200px;
+        }
+        .input-item {
+            display: block;
+            width: 100%;
+            margin-bottom: 20px;
+            border: 0;
+            padding: 10px;
+            border-bottom: 1px solid rgb(128, 125, 125);
+            font-size: 15px;
+            outline: none;
+        }
+        .btn {
+            text-align: center;
+            padding: 10px;
+            width: 100%;
+            margin-top: 40px;
+            background-image: linear-gradient(to right, #a6c1ee, #fbc2eb);
+            color: #fff;
+        }
+        a {
+            text-decoration-line: none;
+            color: #abc1ee;
+        }
+    </style>
+    <script src="../js/jquery-3.6.1.min.js"></script>
+    <script>
+        function search(){
+            let studentId =document.getElementById("studentId").value;
+            let classPerformance =document.getElementById("classPerformance").value;
+            let finalExam=document.getElementById("finalExam").value;
+            let info ={
+                "studentId": studentId,
+                "classPerformance": classPerformance,
+                "finalExam": finalExam,
+            };
+            $.ajax({
+                url:"http://localhost:8080/StudentScoreSystem/teacher/addScore",
+                type:"POST",
+                dataType:"json",
+                data: JSON.stringify(info),
+                contentType:"application/json",
+                success:function (data,readyStatus,xhr){
+                    console.log(data);
+                    if(readyStatus=="success" && xhr.status==200){
+                        if(data.code==200){
+                            alert("评分成功");
+                        }else{
+                            alert(data.msg);
+                        }
+                    }else{
+                        alert("服务器错误")
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="login-wrapper">
+        <div class="header">评分</div>
+        <div class="form-wrapper">
+            studentId:<input type="text" name="studentId" placeholder="studentId" class="input-item" id="studentId">
+            classPerformance:<input type="text" name="classPerformance" placeholder="classPerformance" class="input-item" id="classPerformance">
+            finalExam:<input type="text" name="finalExam" placeholder="finalExam" class="input-item" id="finalExam">
+            <input type="submit" class="btn" value="评分" onclick="search()">
+        </div>
+    </div>
+</div>
+</body>
